@@ -1,0 +1,18 @@
+<ion-header-bar align-title="center" class="bar-positive">
+    <span>Name</span>
+    <span>Winner</span>
+    <span>show</span>
+    <span>point</span>
+    <span>total</span>
+
+</ion-header-bar>
+<ion-content has-header="true">
+    {{Players}}
+    <div ng-repeat="player in players" >
+        <span>{{player.name}}</span>
+        <span><input type="radio" name="winner" value="{{player.name}}"/></span>
+        <span><input type="checkbox" name="winner" value="{{player.name}}"/></span>
+        <span><input type="integer"  value="{{player.point}}"/></span>
+        <span><input type="integer" name="winner" value="{{player.total}}"/></span>
+    </div>
+</ion-content>

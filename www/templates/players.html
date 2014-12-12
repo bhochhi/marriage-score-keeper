@@ -1,0 +1,7 @@
+<ion-content>
+    <div ng-repeat="player in players">
+        <input placeholder="add player" value="{{player.name}}" ng-model="player.name">
+        <button ng-click="removePlayer(player)">x</button>
+    </div>
+    <button ng-click="addPlayer()">+</button>
+</ion-content>
