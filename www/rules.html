@@ -6,51 +6,55 @@
     </ion-nav-buttons>
     <ion-content>
         <div class="list">
-            <div class="item item-divider row row-center">
-                <div class="col-15"> Central Collection:</div>
-                <div class="col-2">&nbsp;&nbsp;</div>
-                <ion-radio class="col" ng-model="rules.central" ng-value="true" name="central" type="radio">Yes
-                </ion-radio>
-                <ion-radio class="col" ng-model="rules.central" ng-value="false" name="central" type="radio">No
-                </ion-radio>
+            <div class="item item-divider">
+                <div class="row">
+                    <div class="col  sub-label">Central Collection:</div>
+                </div>
+                <div class="row">
+                    <ion-radio class="col" ng-model="rules.central" ng-value="true" name="central" type="radio">Yes
+                    </ion-radio>
+                    <ion-radio class="col" ng-model="rules.central" ng-value="false" name="central" type="radio">No
+                    </ion-radio>
+                </div>
             </div>
         </div>
         <div class="list">
-            <div class="item item-divider row row-center">
-                <div class="col-15">Per Point:</div>
-                <div class="col-2">&nbsp;&nbsp;</div>
-                <input class="col" id="perPoint" ng-model="rules.perPoint" type="number"
-                       placeholder="Enter per point in cents"/>
+            <div class="item item-divider">
+                <div class="row">Per Point:</div>
+                <div class="row"> <input class="col" id="perPoint" ng-model="rules.perPoint" type="number"
+                                           placeholder="Enter per point in cents"/></div>
+
             </div>
         </div>
         <div class="list">
-            <div class="item item-divider row row-center">
-                <div class="col-15"> penalty point for lost with no show:</div>
-                <div class="col-2">&nbsp;&nbsp;</div>
-                <input
+            <div class="item item-divider">
+                <div class="row"> penalty point for lost with no show:</div>
+                <div class="row"><input
                         class="col"
                         ng-model="rules.lostWithoutShow"
                         type="number"
-                        placeholder="Enter penalty point"/>
+                        placeholder="Enter penalty point"/></div>
+
             </div>
         </div>
         <div class="list">
-            <div class="item item-divider row row-center">
-                <div class="col-15"> penalty point for lost with show:</div>
-                <div class="col-2">&nbsp;&nbsp;</div>
-                <input
+            <div class="item item-divider">
+                <div class="row"> penalty point for lost with show:</div>
+                <div class="row"><input
                         class="col"
                         ng-model="rules.lostWithShow"
                         type="number"
-                        placeholder="Enter penalty point"/>
+                        placeholder="Enter penalty point"/></div>
+
             </div>
         </div>
         <div class="list">
-            <div class="item item-divider row row-center">
-                <div class="col-15">Murder:</div>
-                <div class="col-2">&nbsp;&nbsp;</div>
-                <ion-radio class="col" ng-model="rules.murder" ng-value="true" name="type">Yes</ion-radio>
-                <ion-radio class="col" ng-model="rules.murder" ng-value="false" name="type">No</ion-radio>
+            <div class="item item-divider">
+                <div class="row">Murder:</div>
+                <div class="row">
+                    <ion-radio class="col" ng-model="rules.murder" ng-value="true" name="type">Yes</ion-radio>
+                    <ion-radio class="col" ng-model="rules.murder" ng-value="false" name="type">No</ion-radio>
+                </div>
             </div>
         </div>
     </ion-content>
