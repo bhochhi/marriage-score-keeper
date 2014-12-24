@@ -32,6 +32,15 @@ angular.module('score-keeper', ['ionic'])
                         controller:"RulesCtrl"
                     }
                 }
+            })
+            .state('app.scoreboard', {
+                url: "/scoreboard",
+                views: {
+                    'menuContent': {
+                        templateUrl: "score-board.html",
+                        controller: "ScoreBoardCtrl"
+                    }
+                }
             });
 
 
@@ -100,5 +109,12 @@ angular.module('score-keeper', ['ionic'])
     .controller('RulesCtrl',function($scope,Rules,SideMenu){
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
+    })
+    .controller('ScoreBoardCtrl',function($scope,SideMenu){
+        $scope.toggleSideMenu = SideMenu.toggleSideMenu;
+        $scope.summary = function(){
+            console.log('summary clicked');
+        }
+
     })
 ;
