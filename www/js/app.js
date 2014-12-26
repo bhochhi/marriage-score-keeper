@@ -1,4 +1,4 @@
-angular.module('score-keeper', ['ionic'])
+angular.module('scoreKeeper', ['ionic','scoreKeeper.controllers','scoreKeeper.services'])
     .constant('_', window._)
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
@@ -29,7 +29,7 @@ angular.module('score-keeper', ['ionic'])
                 views: {
                     'menuContent': {
                         templateUrl: "rules.html",
-                        controller:"RulesCtrl"
+                        controller: "RulesCtrl"
                     }
                 }
             })
@@ -39,6 +39,24 @@ angular.module('score-keeper', ['ionic'])
                     'menuContent': {
                         templateUrl: "score-board.html",
                         controller: "ScoreBoardCtrl"
+                    }
+                }
+            })
+            .state('app.game', {
+                url: "/game/:roundId/:gameId",
+                views: {
+                    'menuContent': {
+                        templateUrl: "game.html",
+                        controller:"GameCtrl"
+                    }
+                }
+            })
+            .state('app.summary', {
+                url: "/summary",
+                views: {
+                    'menuContent': {
+                        templateUrl: "summary.html",
+                        controller: "SummaryCtrl"
                     }
                 }
             });
@@ -69,52 +87,8 @@ angular.module('score-keeper', ['ionic'])
 
         }
     })
-    .service('SideMenu',function($ionicSideMenuDelegate){
+    .service('SideMenu', function ($ionicSideMenuDelegate) {
         this.toggleSideMenu = function () {
             $ionicSideMenuDelegate.toggleLeft();
         };
-    })
-    .controller('AppCtrl', function ($scope) {
-
-    })
-    .controller('PlayersCtrl', function ($scope, Players,SideMenu) {
-        $scope.players = Players.all();
-        $scope.toggleSideMenu = SideMenu.toggleSideMenu;
-
-
-
-
-        $scope.removePlayer = function (index) {
-            Players.removePlayer(index);
-        };
-
-        $scope.addPlayer = function () {
-            if ($scope.showDelete) {
-                $scope.showDelete = !$scope.showDelete;
-            }
-            Players.addPlayer({
-                name: ''
-            });
-        };
-    })
-    .factory('Rules',function(){
-        return {
-            central:true,
-            perPoint:10,
-            lostWithoutShow:10,
-            lostWithShow:3,
-            murder:false
-        }
-    })
-    .controller('RulesCtrl',function($scope,Rules,SideMenu){
-        $scope.rules = Rules;
-        $scope.toggleSideMenu = SideMenu.toggleSideMenu;
-    })
-    .controller('ScoreBoardCtrl',function($scope,SideMenu){
-        $scope.toggleSideMenu = SideMenu.toggleSideMenu;
-        $scope.summary = function(){
-            console.log('summary clicked');
-        }
-
-    })
-;
+    });

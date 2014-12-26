@@ -1,11 +1,11 @@
-<ion-view title="{{}}">
+<ion-view>
 
     <div class="modal">
 
         <!-- Modal header bar -->
         <ion-header-bar class="bar-secondary">
-            <h1 class="title">New Task</h1>
-            <button class="button button-clear button-positive" ng-click="closeNewTask()">Cancel</button>
+            <h1 class="title">{{displayedGame.title}}</h1>
+            <button class="button button-clear button-positive" ng-click="modal.hide()">Cancel</button>
 
         </ion-header-bar>
 

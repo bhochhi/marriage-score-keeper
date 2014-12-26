@@ -1,11 +1,45 @@
 <ion-view title="Score Board">
+
     <ion-nav-buttons side="left">
         <button class="button button-icon" ng-click="toggleSideMenu()">
             <i class="icon ion-navicon"></i>
         </button>
     </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon" ng-click="newRound()">
+            <i class="icon ion-card">New Round</i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <div ng-repeat="round in rounds | orderBy:'id':'true' ">
+                <ion-item class="item-stable"
+                          ng-click="toggleRound(round)"
+                          ng-class="{active: isRoundShown(round)}">
+                    <i class="icon" ng-class="isRoundShown(round) ? 'ion-minus' : 'ion-plus'"></i>
+                    &nbsp;
+                    Round {{round.id}}
+                    <span class="badge badge-positive">{{round.games.length}}</span>
+                </ion-item>
+                <ion-item class="item-accordion"
+                          ng-repeat="game in round.games"
+                          ng-show="isRoundShown(round)">
+                   <button class="button button-positive"
+                           ng-click="displayGame(round.id,game.id)"> Game {{game.id}}</button>
+                </ion-item>
+            </div>
 
+        </ion-list>
+    </ion-content>
+
+    
+    
+    
     <ion-footer-bar class="bar bar-positive">
-        <h1 class="title"><button class="button button-clear" ng-click="summary()"><div class="row row-center">Summary</div> </button></h1>
+        <h1 class="title">
+            <button
+                    class="button button-clear"
+                    ui-sref="app.summary">
+                <div class="row row-center">Summary</div> </button></h1>
     </ion-footer-bar>
 </ion-view>

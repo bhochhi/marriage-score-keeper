@@ -20,15 +20,14 @@
         </div>
         <div class="list">
             <div class="item item-divider">
-                <div class="row">Per Point:</div>
-                <div class="row"> <input class="col" id="perPoint" ng-model="rules.perPoint" type="number"
-                                           placeholder="Enter per point in cents"/></div>
-
+                <div class="row">Each point worth(in cents):</div>
+                <div class="row"><input class="col" ng-model="rules.point" type="number"
+                                        placeholder="Enter Value of each point in cents"/></div>
             </div>
         </div>
         <div class="list">
             <div class="item item-divider">
-                <div class="row"> penalty point for lost with no show:</div>
+                <div class="row">penalty point for lost with no show:</div>
                 <div class="row"><input
                         class="col"
                         ng-model="rules.lostWithoutShow"
