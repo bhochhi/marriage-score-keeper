@@ -15,15 +15,13 @@ angular.module('scoreKeeper.controllers', [])
             if ($scope.showDelete) {
                 $scope.showDelete = !$scope.showDelete;
             }
-            Players.addPlayer({
-                name: ''
-            });
+            Players.addPlayer();
         };
     })
     .factory('Rules', function () {
         return {
             central: true,
-            point: 10,
+            costPerpoint: 10,
             lostWithoutShow: 10,
             lostWithShow: 3,
             murder: false
@@ -33,10 +31,11 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard,$ionicModal) {
+    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard,$ionicModal,Rules,Players) {
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
-        }).then(function(modal) {
+        })
+            .then(function(modal) {
             $scope.modal = modal;
         });
 
@@ -48,9 +47,15 @@ angular.module('scoreKeeper.controllers', [])
 
         $scope.newRound = function () {
             ScoreBoard.addNewRound();
+            $scope.activeRound = $scope.rounds[$scope.rounds.length-1]
         };
 
+
         $scope.rounds = ScoreBoard.getAllRounds();
+
+        $scope.disableNewRound = function(){
+            return  $scope.rounds.length > 0;// || $scope.activeRound.games.length<Players.all().length;
+        };
 
         $scope.toggleRound = function (round) {
             if ($scope.isRoundShown(round)) {
@@ -63,30 +68,65 @@ angular.module('scoreKeeper.controllers', [])
             return $scope.shownRound === round;
         };
 
-        $scope.displayGame =  function(roundId,gameId){
-            $scope.displayedGame = ScoreBoard.getGame(roundId,gameId);
+        $scope.displayGame =  function(round,game){
+            $scope.displayedGame = game;
+            $scope.displayedRound = round;
             $scope.modal.show();
-        }
+        };
+
+        $scope.nextGame = function(round){
+            ScoreBoard.addNewGame(round);
+        };
+        $scope.totalPoints = 0;
+
+        $scope.settleGame = function() {
+            var players = $scope.displayedGame.players;
+            var numberOfPlayers = players.length;
+            var totalPoints = 0;
+            _.each(players,function(player){
+                totalPoints+=player.points;
+            });
+            $scope.totalPoints = totalPoints;
+
+            _.each(players,function(player){
+               if($scope.displayedGame.winner !==player.name) {
+                   var looserPenaltyPoints = player.show?Rules.lostWithShow:Rules.lostWithoutShow;
+                       var totalDebitedPoints = ($scope.totalPoints+looserPenaltyPoints);
+                       var totalCreditedPoints = (numberOfPlayers*player.points);
+                       var totalEarningPoints = totalCreditedPoints - totalDebitedPoints;
+                       player.earnings = (totalEarningPoints*Rules.costPerpoint)/100;
+               }
+            });
+            var winner = _.find(players,{name:$scope.displayedGame.winner});
+            var winnerEarning = 0.0;
+            _.each(players,function(player){
+                if($scope.displayedGame.winner !==player.name)
+                    winnerEarning +=(player.earnings)
+            });
+            winner.earnings=-1*winnerEarning;
+        };
+
+        $scope.newRound();
 
     })
     .controller('SummaryCtrl', function ($scope) {
         $scope.data = [
             {
                 name: 'Shriyan',
-                chips: -20,
+                points: -20,
                 earnings: -2
             },
             {
                 name: 'Rupesh',
-                chips: 30,
+                points: 30,
                 earnings: 3
             }, {
                 name: 'Amir',
-                chips: 30,
+                points: 30,
                 earnings: 3
             }, {
                 name: 'Samir',
-                chips: -40,
+                points: -40,
                 earnings: -4
             }
         ]

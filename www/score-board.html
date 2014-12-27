@@ -6,7 +6,7 @@
         </button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon" ng-click="newRound()">
+        <button class="button button-icon" ng-click="newRound()" ng-disabled="disableNewRound()">
             <i class="icon ion-card">New Round</i>
         </button>
     </ion-nav-buttons>
@@ -21,25 +21,35 @@
                     Round {{round.id}}
                     <span class="badge badge-positive">{{round.games.length}}</span>
                 </ion-item>
-                <ion-item class="item-accordion"
-                          ng-repeat="game in round.games"
-                          ng-show="isRoundShown(round)">
-                   <button class="button button-positive"
-                           ng-click="displayGame(round.id,game.id)"> Game {{game.id}}</button>
+                <ion-item
+                        class="item-accordion"
+                        ng-show="isRoundShown(round)">
+                    <div class="row row-center">
+                        <button
+                                ng-repeat="game in round.games"
+                                class="button button-small button-positive game-button"
+                                ng-click="displayGame(round,game)"> Game {{game.id}}
+                        </button>
+                        <i class="icon ion-arrow-left-a badge badge-positive"> </i>
+                        <ion-option-button class="button button-small button-balance" ng-click="nextGame(round)">Start Next Game
+                        </ion-option-button>
+                        <ion-option-button class="button button-small button-assertive" ng-click="endRound(round)">End Round
+                        </ion-option-button>
+                    </div>
+
                 </ion-item>
             </div>
-
         </ion-list>
     </ion-content>
 
-    
-    
-    
+
     <ion-footer-bar class="bar bar-positive">
         <h1 class="title">
             <button
                     class="button button-clear"
                     ui-sref="app.summary">
-                <div class="row row-center">Summary</div> </button></h1>
+                <div class="row row-center">Summary</div>
+            </button>
+        </h1>
     </ion-footer-bar>
 </ion-view>

@@ -1,4 +1,4 @@
-angular.module('scoreKeeper', ['ionic','scoreKeeper.controllers','scoreKeeper.services'])
+angular.module('scoreKeeper', ['ionic', 'scoreKeeper.controllers', 'scoreKeeper.services'])
     .constant('_', window._)
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
@@ -46,8 +46,7 @@ angular.module('scoreKeeper', ['ionic','scoreKeeper.controllers','scoreKeeper.se
                 url: "/game/:roundId/:gameId",
                 views: {
                     'menuContent': {
-                        templateUrl: "game.html",
-                        controller:"GameCtrl"
+                        templateUrl: "game.html"
                     }
                 }
             })
@@ -66,20 +65,35 @@ angular.module('scoreKeeper', ['ionic','scoreKeeper.controllers','scoreKeeper.se
     })
     .factory('Players', function () {
         var players = [{
-            name: 'Rupesh'
-        }, {
-            name: 'Samir'
-        }, {
-            name: 'Amir'
-        }
-        ];
+            name:"rupesh",
+            show:false,
+            points:0,
+            earnings:0.00
+        },{
+            name:"Amir",
+            show:false,
+            points:0,
+            earnings:0.00
+        },{
+            name:"Samir",
+            show:false,
+            points:0,
+            earnings:0.00
+        }];
+
+        var player = {
+            name: '', //unique
+            show:false,
+            points:0,
+            earnings:0.00
+        };
 
         return {
             all: function () {
                 return players;
             },
-            addPlayer: function (player) {
-                players.push(player);
+            addPlayer: function () {
+                players.push(angular.copy(player));
             },
             removePlayer: function (index) {
                 players.splice(index, 1);

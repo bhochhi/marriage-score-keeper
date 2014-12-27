@@ -9,7 +9,7 @@
                 on-scroll="scrollMirror('head', 'list')">
             <div class="item item-header item-dark row row-item">
                 <div class="col col-left centered">Players</div>
-                <div class="col col-righ">Total Chips/points</div>
+                <div class="col col-righ">Total points</div>
                 <div class="col col-right">Total Earning</div>
             </div>
         </ion-scroll>
@@ -18,9 +18,9 @@
                     zooming="true"
                     on-scroll="scrollMirror('list', 'head')"
                     delegate-handle="list">
-            <div class="item row row-item winner" ng-class="{looser:row.chips<0}" ng-repeat="row in data  | orderBy:'chips':'true'">
+            <div class="item row row-item winner" ng-class="{looser:row.points<0}" ng-repeat="row in data  | orderBy:'points':'true'">
                 <div class="col col-left">{{ row.name }}</div>
-                <div class="col col-right col-sep min-75">{{ row.chips }}</div>
+                <div class="col col-right col-sep min-75">{{ row.points }}</div>
                 <div class="col col-right col-sep min-75">${{ row.earnings}}</div>
             </div>
         </ion-scroll>

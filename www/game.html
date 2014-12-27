@@ -1,28 +1,58 @@
 <ion-view>
 
     <div class="modal">
-
         <!-- Modal header bar -->
         <ion-header-bar class="bar-secondary">
-            <h1 class="title">{{displayedGame.title}}</h1>
+            <button class="button button-clear button-positive" ng-click="modal.hide()">
+                <i class="icon ion-android-arrow-back">back</i>
+            </button>
+            <h1 class="title">Round:{{displayedRound.id}} Game:{{displayedGame.id}}</h1>
             <button class="button button-clear button-positive" ng-click="modal.hide()">Cancel</button>
-
         </ion-header-bar>
 
         <!-- Modal content area -->
         <ion-content>
+            <ion-scroll
+                        style="height: 100%;text-align: center;">
+                <div class="item item-header item-dark row row-item">
+                    <div class="col col-left">Players</div>
+                    <div class="col col-righ">Winner</div>
+                    <div class="col col-right">Show</div>
+                    <div class="col col-right">Points</div>
+                    <div class="col col-right">Earnings($)</div>
+                </div>
+            </ion-scroll>
+            <ion-scroll
+                        style="height: 100%;text-align: center;">
+                <div class="item row row-item"
+                     ng-repeat="player in displayedGame.players">
+                    <div class="col">{{ player.name }}</div>
+                    <input class="col"
+                           type="radio"
+                           name="game"
+                           ng-model="displayedGame.winner"
+                           ng-value="player.name"
+                            />
+                    <input class="col" type="checkbox" name="game" ng-model="player.show" ng-value="true"/>
 
-            <form ng-submit="createTask(task)">
-                <div class="list">
-                    <label class="item item-input">
-                        <input type="text" placeholder="What do you need to do?" ng-model="task.title">
+                    <input class="col contains-center" min="0" type="number" ng-model="player.points"/>
+                    <label class="col contains-center winner"
+                           ng-class="{looser:player.earnings<0}"
+                           type="number">
+                        {{player.earnings|currency}}
                     </label>
                 </div>
-                <div class="padding">
-                    <button type="submit" class="button button-block button-positive">Create Task</button>
+                <div class="item item-footer row row-item">
+                    <div class="col col-left"></div>
+                    <div class="col col-righ"></div>
+                    <div class="col col-right contains-center">Total Points</div>
+                    <div class="col col-right contains-center">{{totalPoints}}</div>
+                    <div class="col col-right"></div>
                 </div>
-            </form>
-
+            </ion-scroll>
+            <div class="padding">
+                <button ng-click="settleGame()" class="button button-block button-positive">Settle</button>
+            </div>
         </ion-content>
 
     </div>

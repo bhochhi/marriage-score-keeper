@@ -22,3 +22,6 @@
 .list .item.item-accordion.ng-hide-remove {
     display: block !important;
 }
+.game-button{
+    margin-right: 10px;
+}
