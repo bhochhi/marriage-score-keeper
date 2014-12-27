@@ -38,4 +38,40 @@ angular.module('scoreKeeper.services',[])
             })
         }
 
-    });
+    })
+    .service('Summary',function(ScoreBoard){
+
+        var newSummary = {
+            name: '',
+            points: 0,
+            earnings: 0
+        };
+
+        var data =  [];
+
+        this.all = function(){
+            console.log(data);
+          return data;
+        };
+
+
+        this.update =function(){
+            _.each(ScoreBoard.getAllRounds(),function(round){
+                _.each(round.games,function(game){
+                    _.each(game.players,function(player){
+                        console.log('update',player);
+                        var playerSummary = _.find(data,{name:player.name})
+                        if(!playerSummary){
+                            playerSummary = angular.copy(newSummary);
+                            playerSummary.name = player.name;
+                        }
+                        playerSummary.points+=player.points;
+                        playerSummary.earnings+=player.earnings;
+                    })
+                })
+            });
+
+        };
+
+    })
+;

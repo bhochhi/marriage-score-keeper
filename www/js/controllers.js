@@ -31,7 +31,7 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Players) {
+    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
         })
@@ -104,33 +104,20 @@ angular.module('scoreKeeper.controllers', [])
                     winnerEarning += (player.earnings)
             });
             $scope.currentGame.winner.earnings = -1 * winnerEarning;
+
+            Summary.update();
         };
 
+
+
         $scope.$watch('currentGame.winner', function (newVal, oldVal) {
-            newVal.show = true;
-            oldVal.show = false;
+            if(newVal){
+                newVal.show = true;
+                oldVal.show = false;
+            }
         });
 
     })
-    .controller('SummaryCtrl', function ($scope) {
-        $scope.data = [
-            {
-                name: 'Shriyan',
-                points: -20,
-                earnings: -2
-            },
-            {
-                name: 'Rupesh',
-                points: 30,
-                earnings: 3
-            }, {
-                name: 'Amir',
-                points: 30,
-                earnings: 3
-            }, {
-                name: 'Samir',
-                points: -40,
-                earnings: -4
-            }
-        ]
+    .controller('SummaryCtrl', function ($scope,Summary) {
+        $scope.data = Summary.all();
     });
