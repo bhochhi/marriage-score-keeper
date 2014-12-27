@@ -31,13 +31,13 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard,$ionicModal,Rules,Players) {
+    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Players) {
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
         })
-            .then(function(modal) {
-            $scope.modal = modal;
-        });
+            .then(function (modal) {
+                $scope.modal = modal;
+            });
 
 
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
@@ -47,14 +47,14 @@ angular.module('scoreKeeper.controllers', [])
 
         $scope.newRound = function () {
             ScoreBoard.addNewRound();
-            $scope.activeRound = $scope.rounds[$scope.rounds.length-1]
+            $scope.activeRound = $scope.rounds[$scope.rounds.length - 1]
         };
 
 
         $scope.rounds = ScoreBoard.getAllRounds();
 
-        $scope.disableNewRound = function(){
-            return  $scope.rounds.length > 0;// || $scope.activeRound.games.length<Players.all().length;
+        $scope.disableNewRound = function () {
+            return $scope.rounds.length > 0;// || $scope.activeRound.games.length<Players.all().length;
         };
 
         $scope.toggleRound = function (round) {
@@ -68,45 +68,48 @@ angular.module('scoreKeeper.controllers', [])
             return $scope.shownRound === round;
         };
 
-        $scope.displayGame =  function(round,game){
-            $scope.displayedGame = game;
-            $scope.displayedRound = round;
+        $scope.displayGame = function (round, game) {
+            $scope.currentGame = game;
+            $scope.currentRound = round;
             $scope.modal.show();
         };
 
-        $scope.nextGame = function(round){
+        $scope.nextGame = function (round) {
             ScoreBoard.addNewGame(round);
         };
         $scope.totalPoints = 0;
 
-        $scope.settleGame = function() {
-            var players = $scope.displayedGame.players;
+        $scope.settleGame = function () {
+            var players = $scope.currentGame.players;
             var numberOfPlayers = players.length;
             var totalPoints = 0;
-            _.each(players,function(player){
-                totalPoints+=player.points;
+            _.each(players, function (player) {
+                totalPoints += player.points;
             });
             $scope.totalPoints = totalPoints;
 
-            _.each(players,function(player){
-               if($scope.displayedGame.winner !==player.name) {
-                   var looserPenaltyPoints = player.show?Rules.lostWithShow:Rules.lostWithoutShow;
-                       var totalDebitedPoints = ($scope.totalPoints+looserPenaltyPoints);
-                       var totalCreditedPoints = (numberOfPlayers*player.points);
-                       var totalEarningPoints = totalCreditedPoints - totalDebitedPoints;
-                       player.earnings = (totalEarningPoints*Rules.costPerpoint)/100;
-               }
+            _.each(players, function (player) {
+                if ($scope.currentGame.winner.name !== player.name) {
+                    var looserPenaltyPoints = player.show ? Rules.lostWithShow : Rules.lostWithoutShow;
+                    var totalDebitedPoints = ($scope.totalPoints + looserPenaltyPoints);
+                    var totalCreditedPoints = (numberOfPlayers * player.points);
+                    var totalEarningPoints = totalCreditedPoints - totalDebitedPoints;
+                    player.earnings = (totalEarningPoints * Rules.costPerpoint) / 100;
+                }
             });
-            var winner = _.find(players,{name:$scope.displayedGame.winner});
+
             var winnerEarning = 0.0;
-            _.each(players,function(player){
-                if($scope.displayedGame.winner !==player.name)
-                    winnerEarning +=(player.earnings)
+            _.each(players, function (player) {
+                if ($scope.currentGame.winner.name !== player.name)
+                    winnerEarning += (player.earnings)
             });
-            winner.earnings=-1*winnerEarning;
+            $scope.currentGame.winner.earnings = -1 * winnerEarning;
         };
 
-        $scope.newRound();
+        $scope.$watch('currentGame.winner', function (newVal, oldVal) {
+            newVal.show = true;
+            oldVal.show = false;
+        });
 
     })
     .controller('SummaryCtrl', function ($scope) {

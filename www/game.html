@@ -6,7 +6,7 @@
             <button class="button button-clear button-positive" ng-click="modal.hide()">
                 <i class="icon ion-android-arrow-back">back</i>
             </button>
-            <h1 class="title">Round:{{displayedRound.id}} Game:{{displayedGame.id}}</h1>
+            <h1 class="title">Round:{{currentRound.id}} Game:{{currentGame.id}}</h1>
             <button class="button button-clear button-positive" ng-click="modal.hide()">Cancel</button>
         </ion-header-bar>
 
@@ -25,13 +25,13 @@
             <ion-scroll
                         style="height: 100%;text-align: center;">
                 <div class="item row row-item"
-                     ng-repeat="player in displayedGame.players">
+                     ng-repeat="player in currentGame.players">
                     <div class="col">{{ player.name }}</div>
                     <input class="col"
                            type="radio"
                            name="game"
-                           ng-model="displayedGame.winner"
-                           ng-value="player.name"
+                           ng-model="currentGame.winner"
+                           ng-value="player"
                             />
                     <input class="col" type="checkbox" name="game" ng-model="player.show" ng-value="true"/>
 
