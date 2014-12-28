@@ -18,10 +18,10 @@
                     zooming="true"
                     on-scroll="scrollMirror('list', 'head')"
                     delegate-handle="list">
-            <div class="item row row-item winner" ng-class="{looser:row.points<0}" ng-repeat="row in data  | orderBy:'points':'true'">
+            <div class="item row row-item winner" ng-class="{looser:row.earnings<0}" ng-repeat="row in data  | orderBy:'points':'true'">
                 <div class="col col-left">{{ row.name }}</div>
                 <div class="col col-right col-sep min-75">{{ row.points }}</div>
-                <div class="col col-right col-sep min-75">${{ row.earnings}}</div>
+                <div class="col col-right col-sep min-75">{{ row.earnings | currency}}</div>
             </div>
         </ion-scroll>
     </ion-content>

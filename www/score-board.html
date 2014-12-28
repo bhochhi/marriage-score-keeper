@@ -31,7 +31,10 @@
                                 ng-click="displayGame(round,game)"> Game {{game.id}}
                         </button>
                         <i class="icon ion-arrow-left-a badge badge-positive"> </i>
-                        <ion-option-button class="button button-small button-balance" ng-click="nextGame(round)">Start Next Game
+                        <ion-option-button
+                                class="button button-small button-balance"
+                                ng-disabled="round.disableNextGame"
+                                ng-click="nextGame(round)">Start Next Game
                         </ion-option-button>
                         <ion-option-button class="button button-small button-assertive" ng-click="endRound(round)">End Round
                         </ion-option-button>
@@ -47,8 +50,7 @@
         <h1 class="title">
             <button
                     class="button button-clear"
-                    <!--ui-sref="app.summary"-->
-                    ng-click="displaySummary()">
+                    ui-sref="app.summary">
                 <div class="row row-center">Summary</div>
             </button>
         </h1>

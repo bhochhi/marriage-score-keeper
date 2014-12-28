@@ -21,7 +21,7 @@ angular.module('scoreKeeper.controllers', [])
     .factory('Rules', function () {
         return {
             central: true,
-            costPerpoint: 10,
+            costPerPoint: 10,
             lostWithoutShow: 10,
             lostWithShow: 3,
             murder: false
@@ -31,7 +31,7 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
+    .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
         })
@@ -75,9 +75,17 @@ angular.module('scoreKeeper.controllers', [])
         };
 
         $scope.nextGame = function (round) {
-            ScoreBoard.addNewGame(round);
+           if(round.games.length<round.games[round.games.length-1].players.length){
+               ScoreBoard.addNewGame(round);
+           }
+            else{
+               round.disableNextGame = true;
+           }
+            $ionicListDelegate.closeOptionButtons();
+
         };
-        $scope.totalPoints = 0;
+
+
 
         $scope.settleGame = function () {
             var players = $scope.currentGame.players;
@@ -86,15 +94,15 @@ angular.module('scoreKeeper.controllers', [])
             _.each(players, function (player) {
                 totalPoints += player.points;
             });
-            $scope.totalPoints = totalPoints;
+            $scope.currentGame.totalPoints = totalPoints;
 
             _.each(players, function (player) {
                 if ($scope.currentGame.winner.name !== player.name) {
                     var looserPenaltyPoints = player.show ? Rules.lostWithShow : Rules.lostWithoutShow;
-                    var totalDebitedPoints = ($scope.totalPoints + looserPenaltyPoints);
+                    var totalDebitedPoints = ($scope.currentGame.totalPoints + looserPenaltyPoints);
                     var totalCreditedPoints = (numberOfPlayers * player.points);
                     var totalEarningPoints = totalCreditedPoints - totalDebitedPoints;
-                    player.earnings = (totalEarningPoints * Rules.costPerpoint) / 100;
+                    player.earnings = (totalEarningPoints * Rules.costPerPoint) / 100;
                 }
             });
 
@@ -109,15 +117,17 @@ angular.module('scoreKeeper.controllers', [])
         };
 
 
-
         $scope.$watch('currentGame.winner', function (newVal, oldVal) {
-            if(newVal){
+            if (newVal) {
                 newVal.show = true;
+            }
+            if (oldVal) {
                 oldVal.show = false;
             }
+
         });
 
     })
-    .controller('SummaryCtrl', function ($scope,Summary) {
+    .controller('SummaryCtrl', function ($scope, Summary) {
         $scope.data = Summary.all();
     });

@@ -10,9 +10,6 @@ angular.module('scoreKeeper.services',[])
         var activeRound;
 
 
-        this.getRound = function(id){
-            return _.find(rounds,{id:id});
-        };
         this.getAllRounds = function(){
             return rounds;
         };
@@ -20,10 +17,12 @@ angular.module('scoreKeeper.services',[])
             var roundId = rounds.length+1;
             activeRound = {
                 id:roundId,
+                disableNextGame:false,
                 games:[{
                     id:1,
                     players:angular.copy(Players.all()),
-                    winner:''
+                    winner:'',
+                    totalPoints:0
                 }]
             };
             rounds.push(activeRound)
@@ -32,10 +31,12 @@ angular.module('scoreKeeper.services',[])
             return _.find(_.find(rounds,{id:roundId}).games,{id:gameId});
         };
         this.addNewGame=function(round){
-            round.games.push({
+            console.log('round add game');
+            var newGame = {
                 id:round.games.length+1,
                 players:angular.copy(Players.all())
-            })
+            };
+            round.games.push(newGame);
         }
 
     })
@@ -50,20 +51,20 @@ angular.module('scoreKeeper.services',[])
         var data =  [];
 
         this.all = function(){
-            console.log(data);
           return data;
         };
 
-
+        //TODO: this is rigorous logic. We should try to refactor this with only adding last game that is to be updated.
         this.update =function(){
+            data = [];
             _.each(ScoreBoard.getAllRounds(),function(round){
                 _.each(round.games,function(game){
                     _.each(game.players,function(player){
-                        console.log('update',player);
-                        var playerSummary = _.find(data,{name:player.name})
+                        var playerSummary = _.find(data,{name:player.name});
                         if(!playerSummary){
                             playerSummary = angular.copy(newSummary);
                             playerSummary.name = player.name;
+                            data.push(playerSummary);
                         }
                         playerSummary.points+=player.points;
                         playerSummary.earnings+=player.earnings;
