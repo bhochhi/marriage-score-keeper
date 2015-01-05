@@ -129,6 +129,13 @@ angular.module('scoreKeeper.services', [])
                 template: template
             });
         };
+
+        this.alert = function(title,template) {
+            return $ionicPopup.alert({
+                title: title,
+                template: template
+            })
+        };
     })
 
 ;

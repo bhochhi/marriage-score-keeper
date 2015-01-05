@@ -29,7 +29,17 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, Players, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
+    .controller('ScoreBoardCtrl',
+    function ($scope,
+              $ionicListDelegate,
+              Players,
+              SideMenu,
+              $state,
+              ScoreBoard,
+              $ionicModal,
+              Rules,
+              Summary,
+              Popup) {
 
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
@@ -59,12 +69,25 @@ angular.module('scoreKeeper.controllers', [])
 
         $scope.displayGame = function (round, game) {
             Players.clean();
-            if(game.isRunning && !_.isEqual(game.players,Players.all())){
-                game.players = angular.copy(Players.all());
+            if(game.isRunning){
+                var activePlayers = Players.all();
+                if(activePlayers.length<2){
+                    Popup.alert("Insufficient Players","At least two Players needed!!").then(function(res){
+                        $state.go('app.players',{});
+                    });
+                }else{
+                    if(!_.isEqual(game.players,activePlayers)){
+                        game.players = angular.copy(activePlayers);
+                    }
+                    $scope.currentGame = game;
+                    $scope.currentRound = round;
+                    $scope.modal.show();
+                }
+            }else{
+                $scope.currentGame = game;
+                $scope.currentRound = round;
+                $scope.modal.show();
             }
-            $scope.currentGame = game;
-            $scope.currentRound = round;
-            $scope.modal.show();
         };
 
         $scope.updateGame = function (currentGame, currentRound) {
