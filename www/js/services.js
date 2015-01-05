@@ -1,46 +1,58 @@
 /**
  * Created by RBhochhibhoya on 12/25/2014.
  */
-angular.module('scoreKeeper.services',[])
+angular.module('scoreKeeper.services', [])
 
-.service('ScoreBoard',function(Players){
+    .service('ScoreBoard', function (Players) {
 
+        console.log("should be called once.");
         var rounds = [];
 
-        var activeRound;
+        var currentRound;
+        var currentGame;
 
 
-        this.getAllRounds = function(){
+
+        this.getAllRounds = function () {
             return rounds;
         };
-        this.addNewRound = function(){
-            var roundId = rounds.length+1;
-            activeRound = {
-                id:roundId,
-                disableNextGame:false,
-                games:[{
-                    id:1,
-                    players:angular.copy(Players.all()),
-                    winner:'',
-                    totalPoints:0
-                }]
-            };
-            rounds.push(activeRound)
-        };
-        this.getGame = function(roundId,gameId){
-            return _.find(_.find(rounds,{id:roundId}).games,{id:gameId});
-        };
-        this.addNewGame=function(round){
-            console.log('round add game');
-            var newGame = {
-                id:round.games.length+1,
-                players:angular.copy(Players.all())
-            };
-            round.games.push(newGame);
-        }
 
+        this.addNewRound = function () {
+            if(currentRound && !currentRound.concluded){
+                return
+            }
+            var roundId = rounds.length + 1;
+            currentRound = {
+                id: roundId,
+                games: [{
+                    id: 1,
+                    players: angular.copy(Players.all()),
+                    winner: '',
+                    totalPoints: 0
+                }],
+                addNextGame : function(){
+                    var newGame = {
+                        id: currentRound.games.length + 1,
+                        players: angular.copy(Players.all()),
+                        winner: '',
+                        totalPoints: 0
+                    };
+                    currentGame = newGame;
+                    this.games.push(currentGame);
+                },
+                concluded:false
+            };
+            rounds.push(currentRound)
+        };
+
+        this.getCurrentGame = function(){
+            return currentGame;
+        };
+        this.getCurrentRound = function(){
+            return currentRound;
+        }
     })
-    .service('Summary',function(ScoreBoard){
+    .service('Summary', function (ScoreBoard) {
 
         var newSummary = {
             name: '',
@@ -48,31 +60,30 @@ angular.module('scoreKeeper.services',[])
             earnings: 0
         };
 
-        var data =  [];
+        var data = [];
 
-        this.all = function(){
-          return data;
+        this.all = function () {
+            return data;
         };
 
         //TODO: this is rigorous logic. We should try to refactor this with only adding last game that is to be updated.
-        this.update =function(){
+        this.update = function () {
             data = [];
-            _.each(ScoreBoard.getAllRounds(),function(round){
-                _.each(round.games,function(game){
-                    _.each(game.players,function(player){
-                        var playerSummary = _.find(data,{name:player.name});
-                        if(!playerSummary){
+            _.each(ScoreBoard.getAllRounds(), function (round) {
+                _.each(round.games, function (game) {
+                    _.each(game.players, function (player) {
+                        var playerSummary = _.find(data, {name: player.name});
+                        if (!playerSummary) {
                             playerSummary = angular.copy(newSummary);
                             playerSummary.name = player.name;
                             data.push(playerSummary);
                         }
-                        playerSummary.points+=player.points;
-                        playerSummary.earnings+=player.earnings;
+                        playerSummary.points += player.points;
+                        playerSummary.earnings += player.earnings;
                     })
                 })
             });
 
         };
 
-    })
-;
+    });

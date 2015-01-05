@@ -51,7 +51,10 @@
                 </div>
             </ion-scroll>
             <div class="padding">
-                <button ng-click="settleGame()" class="button button-block button-positive">update</button>
+                <button
+                        ng-disabled="!currentGame.winner"
+                        ng-click="updateGame(currentGame,currentRound)"
+                        class="button button-block button-positive">update</button>
             </div>
         </ion-content>
 

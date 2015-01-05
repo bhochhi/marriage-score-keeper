@@ -6,8 +6,8 @@
         </button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon" ng-click="newRound()" ng-disabled="disableNewRound()">
-            <i class="icon ion-card">New Round</i>
+        <button class="button button-icon" ng-disabled="true">
+            <i class="icon ion-card">??</i>
         </button>
     </ion-nav-buttons>
     <ion-content>
@@ -31,13 +31,6 @@
                                 ng-click="displayGame(round,game)"> Game {{game.id}}
                         </button>
                         <i class="icon ion-arrow-left-a badge badge-positive"> </i>
-                        <ion-option-button
-                                class="button button-small button-balance"
-                                ng-disabled="round.disableNextGame"
-                                ng-click="nextGame(round)">Start Next Game
-                        </ion-option-button>
-                        <ion-option-button class="button button-small button-assertive" ng-click="endRound(round)">End Round
-                        </ion-option-button>
                     </div>
 
                 </ion-item>

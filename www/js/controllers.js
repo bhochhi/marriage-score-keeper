@@ -5,8 +5,6 @@ angular.module('scoreKeeper.controllers', [])
     .controller('PlayersCtrl', function ($scope, Players, SideMenu) {
         $scope.players = Players.all();
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
-
-
         $scope.removePlayer = function (index) {
             Players.removePlayer(index);
         };
@@ -31,31 +29,21 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
+    .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, Players, SideMenu, $state, ScoreBoard, $ionicModal, Rules, Summary) {
+
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
-        })
-            .then(function (modal) {
-                $scope.modal = modal;
-            });
-
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
 
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
+
         $scope.summary = function () {
             $state.go('app.summary', {});
         };
 
-        $scope.newRound = function () {
-            ScoreBoard.addNewRound();
-            $scope.activeRound = $scope.rounds[$scope.rounds.length - 1]
-        };
-
-
         $scope.rounds = ScoreBoard.getAllRounds();
-
-        $scope.disableNewRound = function () {
-            return $scope.rounds.length > 0;// || $scope.activeRound.games.length<Players.all().length;
-        };
 
         $scope.toggleRound = function (round) {
             if ($scope.isRoundShown(round)) {
@@ -64,42 +52,32 @@ angular.module('scoreKeeper.controllers', [])
                 $scope.shownRound = round;
             }
         };
+
         $scope.isRoundShown = function (round) {
             return $scope.shownRound === round;
         };
 
         $scope.displayGame = function (round, game) {
+            console.log('displayGame');
             $scope.currentGame = game;
             $scope.currentRound = round;
             $scope.modal.show();
         };
 
-        $scope.nextGame = function (round) {
-           if(round.games.length<round.games[round.games.length-1].players.length){
-               ScoreBoard.addNewGame(round);
-           }
-            else{
-               round.disableNextGame = true;
-           }
-            $ionicListDelegate.closeOptionButtons();
-
-        };
-
-
-
-        $scope.settleGame = function () {
-            var players = $scope.currentGame.players;
+        $scope.updateGame = function (currentGame, currentRound) {
+            var players = currentGame.players;
             var numberOfPlayers = players.length;
             var totalPoints = 0;
             _.each(players, function (player) {
                 totalPoints += player.points;
             });
-            $scope.currentGame.totalPoints = totalPoints;
+
+            currentGame.totalPoints = totalPoints;
 
             _.each(players, function (player) {
-                if ($scope.currentGame.winner.name !== player.name) {
+                if (currentGame.winner.name !== player.name) {
                     var looserPenaltyPoints = player.show ? Rules.lostWithShow : Rules.lostWithoutShow;
-                    var totalDebitedPoints = ($scope.currentGame.totalPoints + looserPenaltyPoints);
+                    var totalDebitedPoints = (currentGame.totalPoints + looserPenaltyPoints);
                     var totalCreditedPoints = (numberOfPlayers * player.points);
                     var totalEarningPoints = totalCreditedPoints - totalDebitedPoints;
                     player.earnings = (totalEarningPoints * Rules.costPerPoint) / 100;
@@ -111,11 +89,18 @@ angular.module('scoreKeeper.controllers', [])
                 if ($scope.currentGame.winner.name !== player.name)
                     winnerEarning += (player.earnings)
             });
-            $scope.currentGame.winner.earnings = -1 * winnerEarning;
-
+            currentGame.winner.earnings = -1 * winnerEarning;
             Summary.update();
+            if (currentGame === currentRound.games[currentRound.games.length - 1]) {
+                if (currentRound.games.length >= Players.all().length) {
+                    ScoreBoard.addNewRound();
+                    currentRound.concluded = true;
+                }
+                else {
+                    currentRound.addNextGame();
+                }
+            }
         };
-
 
         $scope.$watch('currentGame.winner', function (newVal, oldVal) {
             if (newVal) {
@@ -127,6 +112,19 @@ angular.module('scoreKeeper.controllers', [])
 
         });
 
+
+        $scope.$watch(function () {
+            return Players.all()
+        }, function (newValue, oldValue) {
+            if(!ScoreBoard.getCurrentGame()) return;
+            if (_.isEqual(newValue, ScoreBoard.getCurrentGame().players)) {
+                console.log('players are Equal');
+            }
+            else {
+                console.log('players are not Equal');
+            }
+        });
+        ScoreBoard.addNewRound();
     })
     .controller('SummaryCtrl', function ($scope, Summary) {
         $scope.data = Summary.all();
