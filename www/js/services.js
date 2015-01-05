@@ -5,21 +5,12 @@ angular.module('scoreKeeper.services', [])
 
     .service('ScoreBoard', function (Players) {
         var rounds = [];
-        var currentRound;
-        var currentGame;
-
-
-
         this.getAllRounds = function () {
             return rounds;
         };
-
         this.addNewRound = function () {
-            if(currentRound && !currentRound.concluded){
-                return
-            }
             var roundId = rounds.length + 1;
-            currentRound = {
+            var newRound = {
                 id: roundId,
                 games: [{
                     id: 1,
@@ -28,7 +19,7 @@ angular.module('scoreKeeper.services', [])
                     totalPoints: 0,
                     isRunning:true
                 }],
-                addNextGame : function(){
+                addNextGame : function(currentRound){
                     var newGame = {
                         id: currentRound.games.length + 1,
                         players: angular.copy(Players.all()),
@@ -36,20 +27,12 @@ angular.module('scoreKeeper.services', [])
                         totalPoints: 0,
                         isRunning:true
                     };
-                    currentGame = newGame;
-                    this.games.push(currentGame);
+                    this.games.push(newGame);
                 },
                 concluded:false
             };
-            rounds.push(currentRound)
+            rounds.push(newRound)
         };
-
-        this.getCurrentGame = function(){
-            return currentGame;
-        };
-        this.getCurrentRound = function(){
-            return currentRound;
-        }
     })
     .service('Summary', function (ScoreBoard) {
 

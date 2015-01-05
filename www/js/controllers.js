@@ -100,7 +100,7 @@ angular.module('scoreKeeper.controllers', [])
                     ScoreBoard.addNewRound();
                 }
                 else {
-                    currentRound.addNextGame();
+                    currentRound.addNextGame(currentRound);
                 }
             }
         };
@@ -113,8 +113,15 @@ angular.module('scoreKeeper.controllers', [])
                 oldVal.show = false;
             }
 
-        });
-        ScoreBoard.addNewRound();
+        })
+
+        function isCurrentRoundConcluded(){
+            return $scope.rounds.length==0 || $scope.rounds[$scope.rounds.length-1].concluded;
+        }
+
+        if(isCurrentRoundConcluded()){
+            ScoreBoard.addNewRound();
+        }
     })
     .controller('SummaryCtrl', function ($scope, Summary) {
         $scope.data = Summary.all();
