@@ -58,7 +58,9 @@ angular.module('scoreKeeper.controllers', [])
         };
 
         $scope.displayGame = function (round, game) {
-            console.log('displayGame');
+            if(game.isRunning && !_.isEqual(game.players,Players.all())){
+                game.players = angular.copy(Players.all());
+            }
             $scope.currentGame = game;
             $scope.currentRound = round;
             $scope.modal.show();
@@ -91,10 +93,11 @@ angular.module('scoreKeeper.controllers', [])
             });
             currentGame.winner.earnings = -1 * winnerEarning;
             Summary.update();
-            if (currentGame === currentRound.games[currentRound.games.length - 1]) {
-                if (currentRound.games.length >= Players.all().length) {
-                    ScoreBoard.addNewRound();
+            if (currentGame.isRunning) {
+                currentGame.isRunning = false;
+                if (currentRound.games.length >= currentGame.players.length) {
                     currentRound.concluded = true;
+                    ScoreBoard.addNewRound();
                 }
                 else {
                     currentRound.addNextGame();
@@ -110,19 +113,6 @@ angular.module('scoreKeeper.controllers', [])
                 oldVal.show = false;
             }
 
-        });
-
-
-        $scope.$watch(function () {
-            return Players.all()
-        }, function (newValue, oldValue) {
-            if(!ScoreBoard.getCurrentGame()) return;
-            if (_.isEqual(newValue, ScoreBoard.getCurrentGame().players)) {
-                console.log('players are Equal');
-            }
-            else {
-                console.log('players are not Equal');
-            }
         });
         ScoreBoard.addNewRound();
     })

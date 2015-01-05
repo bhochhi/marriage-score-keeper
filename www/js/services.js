@@ -4,10 +4,7 @@
 angular.module('scoreKeeper.services', [])
 
     .service('ScoreBoard', function (Players) {
-
-        console.log("should be called once.");
         var rounds = [];
-
         var currentRound;
         var currentGame;
 
@@ -28,14 +25,16 @@ angular.module('scoreKeeper.services', [])
                     id: 1,
                     players: angular.copy(Players.all()),
                     winner: '',
-                    totalPoints: 0
+                    totalPoints: 0,
+                    isRunning:true
                 }],
                 addNextGame : function(){
                     var newGame = {
                         id: currentRound.games.length + 1,
                         players: angular.copy(Players.all()),
                         winner: '',
-                        totalPoints: 0
+                        totalPoints: 0,
+                        isRunning:true
                     };
                     currentGame = newGame;
                     this.games.push(currentGame);
