@@ -119,7 +119,6 @@ angular.module('scoreKeeper.controllers', [])
         function isCurrentRoundConcluded(){
             return $scope.rounds.length==0 || $scope.rounds[$scope.rounds.length-1].concluded;
         }
-
         if(isCurrentRoundConcluded()){
             ScoreBoard.addNewRound();
         }
