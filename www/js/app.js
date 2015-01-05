@@ -22,6 +22,20 @@ angular.module('scoreKeeper', ['ionic', 'scoreKeeper.controllers', 'scoreKeeper.
                         templateUrl: "players.html",
                         controller: "PlayersCtrl"
                     }
+                },
+                onExit:function(Players,$state,Popup){
+                    Players.clean();
+                    if(Players.hasDuplicate()){
+                        Popup
+                            .confirm("Duplicate Player names","do you want to remove duplicates?")
+                            .then(function(ok) {
+                            if(ok) {
+                                Players.removeDuplicates();
+                            } else {
+                                $state.go('app.players');
+                            }
+                        });
+                    }
                 }
             })
             .state('app.rules', {
@@ -62,47 +76,4 @@ angular.module('scoreKeeper', ['ionic', 'scoreKeeper.controllers', 'scoreKeeper.
 
 
         $urlRouterProvider.otherwise('/app/players');
-    })
-    .factory('Players', function () {
-        var players = [{
-            name:"rupesh",
-            show:false,
-            points:0,
-            earnings:0.00
-        },{
-            name:"Amir",
-            show:false,
-            points:0,
-            earnings:0.00
-        },{
-            name:"Samir",
-            show:false,
-            points:0,
-            earnings:0.00
-        }];
-
-        var player = {
-            name: '', //unique
-            show:false,
-            points:0,
-            earnings:0.00
-        };
-
-        return {
-            all: function () {
-                return players;
-            },
-            addPlayer: function () {
-                players.push(angular.copy(player));
-            },
-            removePlayer: function (index) {
-                players.splice(index, 1);
-            }
-
-        }
-    })
-    .service('SideMenu', function ($ionicSideMenuDelegate) {
-        this.toggleSideMenu = function () {
-            $ionicSideMenuDelegate.toggleLeft();
-        };
     });

@@ -68,4 +68,67 @@ angular.module('scoreKeeper.services', [])
 
         };
 
-    });
+    })
+    .factory('Players', function () {
+        var players = [{
+            name:"",
+            show:false,
+            points:0,
+            earnings:0.00
+        },{
+            name:"",
+            show:false,
+            points:0,
+            earnings:0.00
+        },{
+            name:"",
+            show:false,
+            points:0,
+            earnings:0.00
+        }];
+
+        var player = {
+            name: '', //unique
+            show:false,
+            points:0,
+            earnings:0.00
+        };
+
+        return {
+            all: function () {
+                return players;
+            },
+            addPlayer: function () {
+                players.push(angular.copy(player));
+            },
+            removePlayer: function (index) {
+                players.splice(index, 1);
+            },
+            clean:function(){
+                _.remove(players,function(player){return _.isEmpty(player.name);});
+            },
+            hasDuplicate:function(){
+                return _
+                    .uniq(players,function(player){ return player.name.toLowerCase()}).length < players.length;
+            },
+            removeDuplicates:function(){
+                players = _
+                    .uniq(players,function(player){ return player.name.toLowerCase()});
+            }
+        }
+    })
+    .service('SideMenu', function ($ionicSideMenuDelegate) {
+        this.toggleSideMenu = function () {
+            $ionicSideMenuDelegate.toggleLeft();
+        };
+    })
+    .service('Popup', function ($ionicPopup) {
+        this.confirm = function(title,template) {
+            return $ionicPopup.confirm({
+                title: title,
+                template: template
+            });
+        };
+    })
+
+;

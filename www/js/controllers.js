@@ -58,6 +58,7 @@ angular.module('scoreKeeper.controllers', [])
         };
 
         $scope.displayGame = function (round, game) {
+            Players.clean();
             if(game.isRunning && !_.isEqual(game.players,Players.all())){
                 game.players = angular.copy(Players.all());
             }

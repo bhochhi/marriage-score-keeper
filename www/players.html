@@ -14,15 +14,18 @@
     <ion-content class="has-header">
         <ion-list show-delete="showDelete">
             <ion-item ng-repeat="player in players">
-                <input
-                        type="text"
-                        ng-model="player.name"
-                        value="player.name"
-                        placeholder="Enter player's name"/>
-                <ion-delete-button
-                        class="ion-minus-circled"
-                        ng-click="removePlayer($index)">
-                </ion-delete-button>
+                <label class="item item-input">
+                    <input
+                            type="text"
+                            ng-model="player.name"
+                            value="player.name"
+                            placeholder="Enter player's name"
+                            required/>
+                    <ion-delete-button
+                            class="ion-minus-circled"
+                            ng-click="removePlayer($index)">
+                    </ion-delete-button>
+                </label>
             </ion-item>
         </ion-list>
     </ion-content>
