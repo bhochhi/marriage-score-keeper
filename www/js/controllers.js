@@ -1,6 +1,9 @@
 angular.module('scoreKeeper.controllers', [])
-    .controller('AppCtrl', function ($scope) {
-
+    .controller('AppCtrl', function ($scope,ScoreBoard) {
+        $scope.resetScoreBoard = function(){
+            console.log("reset clicked");
+            ScoreBoard.reset();
+        }
     })
     .controller('PlayersCtrl', function ($scope, Players, SideMenu) {
         $scope.players = Players.all();
@@ -29,23 +32,27 @@ angular.module('scoreKeeper.controllers', [])
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
     })
-    .controller('ScoreBoardCtrl',
-    function ($scope,
-              $ionicListDelegate,
-              Players,
-              SideMenu,
-              $state,
-              ScoreBoard,
-              $ionicModal,
-              Rules,
-              Summary,
-              Popup) {
+    .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, Players, SideMenu,$stateParams, $state, ScoreBoard, $ionicModal, Rules, Summary, Popup) {
 
         $ionicModal.fromTemplateUrl('game.html', {
             scope: $scope
         }).then(function (modal) {
             $scope.modal = modal;
         });
+        $scope.reset = function(){
+            Popup.confirm("Reset ScoreBoard","Are you sure you want to start fresh?")
+                .then(function(res){
+                    if(res){
+                        ScoreBoard.reset();
+                        Summary.reset();
+                        $state.transitionTo($state.current, $stateParams, {
+                            reload: true,
+                            inherit: false,
+                            notify: true
+                        });
+                    }
+                });
+        };
 
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
 
@@ -69,21 +76,21 @@ angular.module('scoreKeeper.controllers', [])
 
         $scope.displayGame = function (round, game) {
             Players.clean();
-            if(game.isRunning){
+            if (game.isRunning) {
                 var activePlayers = Players.all();
-                if(activePlayers.length<2){
-                    Popup.alert("Insufficient Players","At least two Players needed!!").then(function(res){
-                        $state.go('app.players',{});
+                if (activePlayers.length < 2) {
+                    Popup.alert("Insufficient Players", "At least two Players needed!!").then(function (res) {
+                        $state.go('app.players', {});
                     });
-                }else{
-                    if(!_.isEqual(game.players,activePlayers)){
+                } else {
+                    if (!_.isEqual(game.players, activePlayers)) {
                         game.players = angular.copy(activePlayers);
                     }
                     $scope.currentGame = game;
                     $scope.currentRound = round;
                     $scope.modal.show();
                 }
-            }else{
+            } else {
                 $scope.currentGame = game;
                 $scope.currentRound = round;
                 $scope.modal.show();
@@ -139,10 +146,11 @@ angular.module('scoreKeeper.controllers', [])
 
         })
 
-        function isCurrentRoundConcluded(){
-            return $scope.rounds.length==0 || $scope.rounds[$scope.rounds.length-1].concluded;
+        function isCurrentRoundConcluded() {
+            return $scope.rounds.length == 0 || $scope.rounds[$scope.rounds.length - 1].concluded;
         }
-        if(isCurrentRoundConcluded()){
+
+        if (isCurrentRoundConcluded()) {
             ScoreBoard.addNewRound();
         }
     })

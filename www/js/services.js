@@ -5,6 +5,9 @@ angular.module('scoreKeeper.services', [])
 
     .service('ScoreBoard', function (Players) {
         var rounds = [];
+        this.reset = function(){
+            rounds.length=0;
+        };
         this.getAllRounds = function () {
             return rounds;
         };
@@ -35,7 +38,6 @@ angular.module('scoreKeeper.services', [])
         };
     })
     .service('Summary', function (ScoreBoard) {
-
         var newSummary = {
             name: '',
             points: 0,
@@ -44,6 +46,9 @@ angular.module('scoreKeeper.services', [])
 
         var data = [];
 
+        this.reset = function(){
+            data = [];
+        }
         this.all = function () {
             return data;
         };
