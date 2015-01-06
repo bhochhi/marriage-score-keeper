@@ -136,7 +136,6 @@ angular.module('scoreKeeper.services', [])
                         players = angular.fromJson(cachePlayers);
                     } else {
                         players = angular.copy(master);
-                        //updateLocalStorage();
                     }
                 }
                 return players;
@@ -146,13 +145,11 @@ angular.module('scoreKeeper.services', [])
             },
             removePlayer: function (index) {
                 players.splice(index, 1);
-                //updateLocalStorage();
             },
             clean: function () {
                 _.remove(players, function (player) {
                     return _.isEmpty(player.name);
                 });
-                //updateLocalStorage();
             },
             hasDuplicate: function () {
                 return _
@@ -165,7 +162,6 @@ angular.module('scoreKeeper.services', [])
                     .uniq(players, function (player) {
                         return player.name.toLowerCase()
                     });
-                //updateLocalStorage();
             },
             updateCache: function () {
                 updateLocalStorage();
@@ -173,8 +169,11 @@ angular.module('scoreKeeper.services', [])
         }
     })
     .factory('Rules', function () {
-        var rules = window.localStorage['rules'];
-        if(!rules){
+        var cachedRules = window.localStorage['rules'];
+        if (cachedRules) {
+            rules = angular.fromJson(cachedRules);
+        }
+        else {
             rules = {
                 central: true,
                 costPerPoint: 10,
@@ -185,7 +184,6 @@ angular.module('scoreKeeper.services', [])
         }
         return rules;
     })
-
     .service('SideMenu', function ($ionicSideMenuDelegate) {
         this.toggleSideMenu = function () {
             $ionicSideMenuDelegate.toggleLeft();
@@ -205,6 +203,4 @@ angular.module('scoreKeeper.services', [])
                 template: template
             })
         };
-    })
-
-;
+    });
