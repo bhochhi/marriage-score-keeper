@@ -8,6 +8,9 @@
 .looser{
     color:red;
 }
+.activeBox{
+    border: #145fd7 solid 1px;
+}
 .list .item.item-accordion {
     line-height: 38px;
     padding-top: 0;
