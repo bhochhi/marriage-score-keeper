@@ -124,15 +124,21 @@ angular.module('scoreKeeper.controllers', [])
                     ScoreBoard.addNewRound();
                 }
                 else {
-                    currentRound.addNextGame(currentRound);
+                    ScoreBoard.addNextGame(currentRound);
                 }
             }
         };
 
-        $scope.updateField = function(player){
+        $scope.pointsOnFocus = function(player){
             if(player.points==0)
             {
                 player.points=undefined;
+            }
+        };
+        $scope.pointsOnBlur = function(player){
+            if(player.points==undefined)
+            {
+                player.points=0;
             }
         };
         $scope.$watch('currentGame.winner', function (newVal, oldVal) {

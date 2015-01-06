@@ -52,7 +52,8 @@
                                     min="0"
                                     type="number"
                                     ng-model="player.points"
-                                    ng-focus="player.points?player.points:undefined"
+                                    ng-focus="pointsOnFocus(player)"
+                                    ng-blur="pointsOnBlur(player)"
                                     />
 
                         <label

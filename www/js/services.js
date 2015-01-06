@@ -12,15 +12,25 @@ angular.module('scoreKeeper.services', [])
 
         this.getAllRounds = function () {
             if (!rounds) {
-                var cacheRound = window.localStorage['rounds'];
-                if (cacheRound) {
-                    rounds = angular.fromJson(cacheRound);
+                var cachedRounds = window.localStorage['rounds'];
+                if (cachedRounds) {
+                    rounds = angular.fromJson(cachedRounds);
                 }
                 else {
                     rounds = [];
                 }
             }
             return rounds;
+        };
+        this.addNextGame = function(round){
+            var newGame = {
+                id: round.games.length + 1,
+                players: angular.copy(Players.all()),
+                winner: '',
+                totalPoints: 0,
+                isRunning: true
+            };
+            round.games.push(newGame);
         };
         this.addNewRound = function () {
             var roundId = rounds.length + 1;
@@ -33,16 +43,6 @@ angular.module('scoreKeeper.services', [])
                     totalPoints: 0,
                     isRunning: true
                 }],
-                addNextGame: function (currentRound) {
-                    var newGame = {
-                        id: currentRound.games.length + 1,
-                        players: angular.copy(Players.all()),
-                        winner: '',
-                        totalPoints: 0,
-                        isRunning: true
-                    };
-                    this.games.push(newGame);
-                },
                 concluded: false
             };
             rounds.push(newRound)
@@ -169,6 +169,7 @@ angular.module('scoreKeeper.services', [])
         }
     })
     .factory('Rules', function () {
+        var rules;
         var cachedRules = window.localStorage['rules'];
         if (cachedRules) {
             rules = angular.fromJson(cachedRules);

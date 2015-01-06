@@ -27,10 +27,10 @@
                     <div class="row row-center">
                         <button
                                 ng-repeat="game in round.games"
-                                class="button button-small button-positive game-button"
+                                class="button button-small game-button"
+                                ng-class="game.isRunning ? 'button-positive' : 'button-stable'"
                                 ng-click="displayGame(round,game)"> Game {{game.id}}
                         </button>
-                        <i class="icon ion-arrow-left-a badge badge-positive"> </i>
                     </div>
 
                 </ion-item>
