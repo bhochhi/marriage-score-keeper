@@ -129,6 +129,12 @@ angular.module('scoreKeeper.controllers', [])
             }
         };
 
+        $scope.updateField = function(player){
+            if(player.points==0)
+            {
+                player.points=undefined;
+            }
+        };
         $scope.$watch('currentGame.winner', function (newVal, oldVal) {
             if (newVal) {
                 newVal.show = true;
