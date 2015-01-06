@@ -1,9 +1,6 @@
 angular.module('scoreKeeper.controllers', [])
     .controller('AppCtrl', function ($scope,ScoreBoard) {
-        $scope.resetScoreBoard = function(){
-            console.log("reset clicked");
-            ScoreBoard.reset();
-        }
+
     })
     .controller('PlayersCtrl', function ($scope, Players, SideMenu) {
         $scope.players = Players.all();
@@ -11,26 +8,22 @@ angular.module('scoreKeeper.controllers', [])
         $scope.removePlayer = function (index) {
             Players.removePlayer(index);
         };
-
         $scope.addPlayer = function () {
             if ($scope.showDelete) {
                 $scope.showDelete = !$scope.showDelete;
             }
             Players.addPlayer();
         };
-    })
-    .factory('Rules', function () {
-        return {
-            central: true,
-            costPerPoint: 10,
-            lostWithoutShow: 10,
-            lostWithShow: 3,
-            murder: false
-        }
+        $scope.$watch('players',function(newValue,oldValue){
+            Players.updateCache();
+        },true);
     })
     .controller('RulesCtrl', function ($scope, Rules, SideMenu) {
         $scope.rules = Rules;
         $scope.toggleSideMenu = SideMenu.toggleSideMenu;
+        $scope.$watch('rules',function(newVal){
+            window.localStorage['rules'] = angular.toJson(newVal);
+        },true);
     })
     .controller('ScoreBoardCtrl', function ($scope, $ionicListDelegate, Players, SideMenu,$stateParams, $state, ScoreBoard, $ionicModal, Rules, Summary, Popup) {
 
@@ -145,7 +138,9 @@ angular.module('scoreKeeper.controllers', [])
             }
 
         })
-
+        $scope.$watch('rounds',function(){
+            ScoreBoard.updateLocalStorage();
+        },true);
         function isCurrentRoundConcluded() {
             return $scope.rounds.length == 0 || $scope.rounds[$scope.rounds.length - 1].concluded;
         }
@@ -156,4 +151,7 @@ angular.module('scoreKeeper.controllers', [])
     })
     .controller('SummaryCtrl', function ($scope, Summary) {
         $scope.data = Summary.all();
+        $scope.$watch('data',function(newValue,oldValue){
+            Summary.updateCache();
+        },true);
     });
