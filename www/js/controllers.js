@@ -38,11 +38,18 @@ angular.module('scoreKeeper.controllers', [])
                     if(res){
                         ScoreBoard.reset();
                         Summary.reset();
-                        $state.transitionTo($state.current, $stateParams, {
-                            reload: true,
-                            inherit: false,
-                            notify: true
-                        });
+                        Popup.confirm("Clear Players","Do you also want to clear all the players?")
+                            .then(function(res){
+                                if(res){
+                                    Players.reset();
+                                }
+                                $state.transitionTo($state.current, $stateParams, {
+                                    reload: true,
+                                    inherit: false,
+                                    notify: true
+                                });
+                            });
+
                     }
                 });
         };

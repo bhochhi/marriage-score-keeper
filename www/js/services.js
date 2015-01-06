@@ -165,6 +165,9 @@ angular.module('scoreKeeper.services', [])
             },
             updateCache: function () {
                 updateLocalStorage();
+            },
+            reset:function(){
+                players = [];
             }
         }
     })
