@@ -3,18 +3,18 @@
         <button class="button button-icon" ng-click="toggleSideMenu()">
             <i class="icon ion-navicon"></i>
         </button>
-        <button class="button button-icon icon  ion-plus-circled"
+        <button class="button button-icon icon-right ion-person-add"
                 ng-click="addPlayer()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-minus-circled"
-                ng-click="showDelete = !showDelete;"></button>
+        <button class="button ion-person button-assertive icon-right"
+                ng-click="showDelete = !showDelete;">remove</button>
     </ion-nav-buttons>
 
     <ion-content class="has-header">
         <ion-list show-delete="showDelete">
             <ion-item ng-repeat="player in players">
-                <label class="item item-input ion-ios7-person"
+                <label class="item item-input"
                         ng-class="{'activeBox':focus}">
                     <input
                             type="text"
