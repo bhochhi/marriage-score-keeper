@@ -20,9 +20,7 @@
                     <div class="col ">Maal</div>
                     <div class="col ">Earnings($)</div>
                 </div>
-            </ion-scroll>
-            <ion-scroll
-                    style="text-align: center;">
+
                 <div class="item row row-item row-center"
                      ng-repeat="player in currentGame.players">
                     <div class="col col-33">
@@ -68,15 +66,17 @@
                     <div class="col contains-center">{{currentGame.totalPoints}}</div>
                     <div class="col "></div>
                 </div>
+
+                <div class="padding">
+                    <button
+                            ng-disabled="!currentGame.winner"
+                            ng-click="updateGame(currentGame,currentRound)"
+                            class="button button-block button-positive">calculate
+                    </button>
+                </div>
             </ion-scroll>
 
-            <div class="padding">
-                <button
-                        ng-disabled="!currentGame.winner"
-                        ng-click="updateGame(currentGame,currentRound)"
-                        class="button button-block button-positive">calculate
-                </button>
-            </div>
+
         </ion-content>
 
     </div>
