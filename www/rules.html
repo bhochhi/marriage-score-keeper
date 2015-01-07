@@ -5,19 +5,7 @@
         </button>
     </ion-nav-buttons>
     <ion-content>
-        <div class="list">
-            <div class="item item-divider">
-                <div class="row">
-                    <div class="col  sub-label">Central Collection:</div>
-                </div>
-                <div class="row">
-                    <ion-radio class="col" ng-model="rules.central" ng-value="true" name="central" type="radio">Yes
-                    </ion-radio>
-                    <ion-radio class="col" ng-model="rules.central" ng-value="false" name="central" type="radio">No
-                    </ion-radio>
-                </div>
-            </div>
-        </div>
+
         <div class="list">
             <div class="item item-divider">
                 <div class="row">Each maal/point worth(in cents):</div>
@@ -27,7 +15,7 @@
         </div>
         <div class="list">
             <div class="item item-divider">
-                <div class="row">penalty point for lost with no show:</div>
+                <div class="row">penalty points for loser without seen:</div>
                 <div class="row"><input
                         class="col"
                         ng-model="rules.lostWithoutShow"
@@ -38,7 +26,7 @@
         </div>
         <div class="list">
             <div class="item item-divider">
-                <div class="row"> penalty point for lost with show:</div>
+                <div class="row"> penalty point for loser with seen:</div>
                 <div class="row"><input
                         class="col"
                         ng-model="rules.lostWithShow"
@@ -49,7 +37,7 @@
         </div>
         <div class="list">
             <div class="item item-divider">
-                <div class="row">Murder:</div>
+                <div class="row">Murder:Do not count maals of loser if not seen?</div>
                 <div class="row">
                     <ion-radio class="col" ng-model="rules.murder" ng-value="true" name="type">Yes</ion-radio>
                     <ion-radio class="col" ng-model="rules.murder" ng-value="false" name="type">No</ion-radio>

@@ -38,6 +38,7 @@
                                     type="checkbox"
                                     name="game"
                                     ng-model="player.show"
+                                    ng-change="seenPlayerChange(player)"
                                     ng-value="true"/>
                         </label>
                     </div>
@@ -46,6 +47,7 @@
                                     class="col contains-center"
                                     min="0"
                                     type="number"
+                                    ng-disabled="rules.murder && !player.show"
                                     ng-model="player.points"
                                     ng-focus="pointsOnFocus(player)"
                                     ng-blur="pointsOnBlur(player)"

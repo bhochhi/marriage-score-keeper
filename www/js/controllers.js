@@ -61,6 +61,13 @@ angular.module('scoreKeeper.controllers', [])
         };
 
         $scope.rounds = ScoreBoard.getAllRounds();
+        $scope.rules = Rules;
+
+        $scope.seenPlayerChange = function(player){
+            if($scope.rules.murder && !player.show){
+                player.points = 0;
+            }
+        };
 
         $scope.toggleRound = function (round) {
             if ($scope.isRoundShown(round)) {
